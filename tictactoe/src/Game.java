@@ -5,11 +5,7 @@ public class Game {
     private Player currPlayer;
     private final int numberOfPlayer = 2;
     private final int numberOfCell = 3;
-    private final int[] arrRow = new int[numberOfCell];
-    private final int[] arrCol = new int[numberOfCell];
-    int dlr = 0;
-    int drl = 0;
-
+    private int totalMove  = 0;
 
     public Game(Player p1, Player p2) {
         this.board = new Board(numberOfCell);
@@ -29,8 +25,6 @@ public class Game {
     }
 
     public boolean isWinner() {
-
-
         return false;
     }
 
@@ -50,10 +44,15 @@ public class Game {
         if (status.PLAYING == status) {
             if (isValidMove(row, col)) {
                 board.getBoard()[row][col].setPiece(currPlayer.getPiece());
+                totalMove++;
                 if (checkIfWon(row, col)) {
+                    System.out.println(currPlayer.getUsername() + " has won the Game!!");
+                    status = Status.WON;
                     board.printBoard();
                     return false;
-                } else if (checkIfDraw(row, col)) {
+                } else if (totalMove == numberOfCell * numberOfCell) {
+                    System.out.println("Game has been finished with status DRAW!!");
+                    status = Status.DRAW;
                     board.printBoard();
                     return false;
                 }
@@ -73,48 +72,47 @@ public class Game {
     }
 
     private boolean checkIfDraw(int row, int col) {
-        if (drl > numberOfCell || dlr > numberOfCell || arrCol[col] > numberOfCell || arrRow[row] > numberOfCell
-                || -numberOfCell > arrRow[row] || drl < -numberOfCell || dlr < -numberOfCell || arrCol[col] < -numberOfCell) {
 
-            status = Status.DRAW;
-            System.out.println("Game has been finished with status DRAW!!");
-            return true;
-        }
+//        if (drl > numberOfCell || dlr > numberOfCell || arrCol[col] > numberOfCell || arrRow[row] > numberOfCell
+//                || -numberOfCell > arrRow[row] || drl < -numberOfCell || dlr < -numberOfCell || arrCol[col] < -numberOfCell) {
+//
+//            status = Status.DRAW;
+//            System.out.println("Game has been finished with status DRAW!!");
+//            return true;
+//        }
         return false;
     }
 
     private boolean checkIfWon(int row, int col) {
+        boolean rowMatch = true;
+        boolean colMatch = true;
+        boolean diagonalMatch = true;
+        boolean antiDiagonalMatch = true;
 
-        if (currPlayer.getUserId().equals(players[0].getUserId())) {
-            if (row == col) {
-                dlr++;
-            } else if (row + col == numberOfCell - 1) {
-                drl++;
+        for(int i = 0; i < board.getSize(); i++) {
+            if( board.getBoard()[row][i] != null && board.getBoard()[row][i].getPiece() != currPlayer.getPiece() ) {
+                rowMatch = false;
             }
-            arrRow[row] = arrRow[row] + 1;
-            arrCol[col] = arrCol[col] + 1;
-            if (arrRow[row] == numberOfCell || arrCol[col] == numberOfCell || drl == numberOfCell || dlr == numberOfCell) {
-                status = Status.WON;
-                System.out.println(currPlayer.getUsername() + " has won the Game!!");
-                return true;
-            }
-        } else {
-            if (row == col) {
-                dlr--;
-            } else if (row + col == -(numberOfCell - 1)) {
-                drl--;
-            }
-            arrRow[row] = arrRow[row] - 1;
-            arrCol[col] = arrCol[col] - 1;
-            if (arrRow[row] == -numberOfCell || arrCol[col] == -numberOfCell || drl == -numberOfCell || dlr == -numberOfCell) {
-                status = Status.WON;
-                System.out.println(currPlayer.getUsername() + " has won the Game!!");
-                return true;
-            }
-
         }
 
-        return false;
-    }
+        for(int i = 0; i < board.getSize(); i++) {
+            if( board.getBoard()[i][col] != null && board.getBoard()[i][col].getPiece() != currPlayer.getPiece() ) {
+                colMatch = false;
+            }
+        }
 
+        for(int i = 0, j = 0; i < board.getSize(); i++, j++) {
+            if( board.getBoard()[i][j] != null && board.getBoard()[i][j].getPiece() != currPlayer.getPiece() ) {
+                diagonalMatch = false;
+            }
+        }
+
+        for(int i = 0, j = board.getSize() - 1; i < board.getSize(); i++, j--) {
+            if( board.getBoard()[i][j] != null && board.getBoard()[i][j].getPiece() != currPlayer.getPiece() ) {
+                antiDiagonalMatch = false;
+            }
+        }
+
+        return rowMatch || colMatch || diagonalMatch || antiDiagonalMatch;
+    }
 }

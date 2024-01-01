@@ -13,11 +13,16 @@ public class Game {
 
     public void makeMove() {
         int rollValue = dice.roll();
-        System.out.println("Player " + (currPlayerIndex + 1) + " rolled a " + rollValue);
-        players[currPlayerIndex].setPosition(players[currPlayerIndex].getPosition() + rollValue);
-        checkForSnackOrLadder();
+        System.out.println("Player " + (currPlayerIndex + 1) + " " + players[currPlayerIndex].getPlayerName() + " rolled a " + rollValue);
+        if( players[currPlayerIndex].getPosition() + rollValue <= board.getSize() ) {
+            players[currPlayerIndex].setPosition(players[currPlayerIndex].getPosition() + rollValue);
+            checkForSnackOrLadder();
 
-        System.out.println("Player " + (currPlayerIndex + 1) + " is now at position " + players[currPlayerIndex].getPosition());
+            System.out.println("Player " + (currPlayerIndex + 1) + " is now at position " + players[currPlayerIndex].getPosition());
+
+        } else {
+            System.out.println("Player " + (currPlayerIndex + 1) + " is now at position " + players[currPlayerIndex].getPosition() + " can't move to further as it is out of bound.");
+        }
         if(!isWinner()) {
             switchPlayer();
         }
@@ -35,7 +40,7 @@ public class Game {
     }
 
     public boolean isWinner() {
-        if(players[currPlayerIndex].getPosition() >= board.getSize()) {
+        if(players[currPlayerIndex].getPosition() == board.getSize()) {
             System.out.println(players[currPlayerIndex].getPlayerName());
             return true;
         }

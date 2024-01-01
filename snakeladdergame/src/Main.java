@@ -1,7 +1,5 @@
 import java.util.*;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
         Map<Integer, Integer> snakes = new HashMap<>();
@@ -16,10 +14,11 @@ public class Main {
         ladders.put(42, 93);
         ladders.put(72, 84);
 
-        Board snakesAndLaddersBoard = new Board(50, snakes, ladders);
-        Player player1 = new Player("Mustafiz");
-        Player player2 = new Player("Kaifee");
-        Player[] playersArray = {player1, player2};
+        Board snakesAndLaddersBoard = new Board(100, snakes, ladders);
+        Player player1 = new Player("Mustafiz", 1);
+        Player player2 = new Player("Kaifee", 2);
+        Player player3 = new Player("Mumtaz", 3);
+        Player[] playersArray = {player1, player2, player3};
 
         Game snakeAndLadderGame = new Game(playersArray, snakesAndLaddersBoard);
 
