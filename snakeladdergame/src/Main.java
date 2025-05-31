@@ -6,7 +6,7 @@ public class Main {
         snakes.put(17, 7);
         snakes.put(54, 34);
         snakes.put(62, 19);
-        snakes.put(98, 79);
+        snakes.put(98, 19);
 
         Map<Integer, Integer> ladders = new HashMap<>();
         ladders.put(3, 38);

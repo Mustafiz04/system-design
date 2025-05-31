@@ -11,9 +11,9 @@ public class Main {
         game.play(1, 1);
         game.play(1, 0);
         game.play(1, 2);
-        game.play(2, 1);
         game.play(2, 0);
-        game.play(2, 2);
+//        game.play(2, 1);
+//        game.play(2, 2);
 //        game.play(2, 2);
     }
 }

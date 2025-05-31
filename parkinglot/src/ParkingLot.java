@@ -1,112 +1,65 @@
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-public class ParkingLot implements Parking {
-    private static ParkingLot parkingLot;
-    private final List<Slot> twoWheelerSlots;
-    private final List<Slot> fourWheelerSlots;
+public class ParkingLot {
+    private String name;
+    private Address address;
+    private List<ParkingFloor> parkingFloors;
+    private static ParkingLot parkingLot = null;
 
-    public ParkingLot() {
-        this.twoWheelerSlots = new ArrayList<>();
-        this.fourWheelerSlots = new ArrayList<>();
+
+    public ParkingLot(String name, Address address, List<ParkingFloor> floor) {
+        this.name = name;
+        this.address = address;
+        this.parkingFloors = floor;
     }
 
-    public static ParkingLot getParkingLot() {
-        if (parkingLot == null)
-            parkingLot = new ParkingLot();
+    public static ParkingLot getInstance(String name, Address address, List<ParkingFloor> floor) {
+        if(parkingLot != null) {
+            parkingLot = new ParkingLot(name, address, floor);
+        }
         return parkingLot;
     }
 
-    public boolean initializeParkingSlots(int numberOfTwoWheelerParkingSlots, int numberOfFourWheelerParkingSlots) {
-        for (int i = 1; i <= numberOfTwoWheelerParkingSlots; i++) {
-            twoWheelerSlots.add(new Slot(i));
-        }
-        System.out.printf("Created a two wheeler parking lot with %s slots %n", numberOfTwoWheelerParkingSlots);
-
-        for (int i = 1; i <= numberOfFourWheelerParkingSlots; i++) {
-            fourWheelerSlots.add(new Slot(i));
-        }
-        System.out.printf("Created a four wheeler parking lot with %s slots %n", numberOfFourWheelerParkingSlots);
-        return true;
+    public void addFloor(String name,  Map<ParlingSlotType, Map<String, ParkingSlot>> slots) {
+        ParkingFloor parkingFloor = new ParkingFloor(name, slots);
+        this.parkingFloors.add(parkingFloor);
     }
 
-    public Ticket park(Vehicle vehicle) throws ParkingFullException {
-        Slot nextAvailableSlot;
-        if (vehicle.getVehicleType().equals(VehicleType.FOUR_WHEELER)) {
-            nextAvailableSlot = getNextAvailableFourWheelerSlot();
-        } else {
-            nextAvailableSlot = getNextAvailableTwoWheelerSlot();
-        }
-        nextAvailableSlot.occupySlot(vehicle);
-        System.out.printf("Allocated slot number: %d \n", nextAvailableSlot.getSlotId());
-        Ticket ticket = new Ticket(nextAvailableSlot.getSlotId(), vehicle.getVehicleNumber(),
-                vehicle.getVehicleType(), new Date());
+    public void removeFloor(ParkingFloor parkingFloor) {
+        parkingFloors.remove(parkingFloor);
+    }
+
+    public Ticket assignTicket (Vehicle vehicle) {
+        ParkingSlot parkingSlot = getRelevantSlotForVehicleAndPark(vehicle);
+        if(parkingSlot == null) return null;
+        Ticket ticket = createTicketForSlot(parkingSlot, vehicle);
         return ticket;
     }
 
-    private Slot getNextAvailableFourWheelerSlot() throws ParkingFullException {
-        for (Slot slot : fourWheelerSlots) {
-            if (slot.isAvailable()) {
-                return slot;
-            }
+    public double scanAndPay(Ticket ticket) {
+        long endTime = System.currentTimeMillis();
+        ticket.parkingSlot.removeVehicle(ticket.vehicle);
+        int duration = (int) (endTime - ticket.startTime) / 1000;
+        double price = getPrice(duration, ticket.parkingSlot.parlingSlotType);
+        return price;
+    }
+
+    private double getPrice(int duration, ParlingSlotType parlingSlotType) {
+        return 0;
+    }
+
+    public Ticket createTicketForSlot(ParkingSlot parkingSlot, Vehicle vehicle) {
+        return new Ticket(vehicle, parkingSlot);
+    }
+
+    public ParkingSlot getRelevantSlotForVehicleAndPark(Vehicle vehicle) {
+        ParkingSlot slot = null;
+        for(ParkingFloor floor : parkingFloors) {
+            slot = floor.getRelevantSlotForVehicleAndPark(vehicle);
+            if(slot != null) return slot;
         }
-        throw new ParkingFullException("No Empty Slot available");
+        return null;
     }
 
-    private Slot getNextAvailableTwoWheelerSlot() throws ParkingFullException {
-        for (Slot slot : twoWheelerSlots) {
-            if (slot.isAvailable()) {
-                return slot;
-            }
-        }
-        throw new ParkingFullException("No Empty Slot available");
-    }
-
-    public int unpark(Ticket ticket, ParkingStrategy parkingCostStrategy) throws InvalidVehicleNumberException {
-        int costByHours = 0;
-        Slot slot;
-        try {
-            if (ticket.getVehicleType().equals(VehicleType.FOUR_WHEELER)) {
-                slot = getFourWheelerSlotByVehicleNumber(ticket.getVehicleNumber());
-            } else {
-                slot = getTwoWheelerSlotByVehicleNumber(ticket.getVehicleNumber());
-            }
-            slot.vacateSlot();
-            int hours = getHoursParked(ticket.getDate(), new Date());
-            costByHours = parkingCostStrategy.charge(hours);
-            System.out.println(
-                    "Vehicle with registration " + ticket.getVehicleNumber() + " at slot number " + slot.getSlotId()
-                            + " was parked for " + hours + " hours and the total charge is " + costByHours);
-        } catch (InvalidVehicleNumberException invalidVehicleNumber) {
-            System.out.println(invalidVehicleNumber.getMessage());
-            throw invalidVehicleNumber;
-        }
-        return costByHours;
-    }
-
-    private int getHoursParked(Date startDate, Date endDate) {
-        long secs = (endDate.getTime() - startDate.getTime()) / 1000;
-        int hours = (int) (secs / 3600);
-        return hours;
-
-    }
-
-    private Slot getFourWheelerSlotByVehicleNumber(String vehicleNumber) throws InvalidVehicleNumberException {
-        for (Slot slot : fourWheelerSlots) {
-            Vehicle vehicle = slot.getVehicle();
-            if (vehicle != null && vehicle.getVehicleNumber().equals(vehicleNumber)) {
-                return slot;
-            }
-        }
-        throw new InvalidVehicleNumberException("Two wheeler with registration number " + vehicleNumber + " not found");
-    }
-
-    private Slot getTwoWheelerSlotByVehicleNumber(String vehicleNumber) throws InvalidVehicleNumberException {
-        for (Slot slot : twoWheelerSlots) {
-            Vehicle vehicle = slot.getVehicle();
-            if (vehicle != null && vehicle.getVehicleNumber().equals(vehicleNumber)) {
-                return slot;
-            }
-        }
-        throw new InvalidVehicleNumberException("Two wheeler with registration number " + vehicleNumber + " not found");
-    }
 }

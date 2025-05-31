@@ -1,47 +1,14 @@
-import java.util.Date;
-
 public class Ticket {
-    private int slotId;
-    private String vehicleNumber;
-    private Date date;
-    private VehicleType vehicleType;
+    String ticketNumber;
+    long startTime;
+    long endTime;
+    Vehicle vehicle;
+    ParkingSlot parkingSlot;
 
-    public Ticket(int slotId, String vehicleNumber, VehicleType vehicleType, Date date) {
-        this.slotId = slotId;
-        this.vehicleNumber = vehicleNumber;
-        this.date = date;
-        this.vehicleType = vehicleType;
-    }
-
-    public int getSlotId() {
-        return slotId;
-    }
-
-    public void setSlotId(int slotId) {
-        this.slotId = slotId;
-    }
-
-    public String getVehicleNumber() {
-        return vehicleNumber;
-    }
-
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public VehicleType getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public Ticket(Vehicle vehicle, ParkingSlot parkingSlot) {
+        this.ticketNumber = (vehicle.getVehicleNumber() + System.currentTimeMillis());
+        this.startTime = System.currentTimeMillis();
+        this.vehicle = vehicle;
+        this.parkingSlot = parkingSlot;
     }
 }

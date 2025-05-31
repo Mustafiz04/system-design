@@ -1,11 +1,6 @@
 public class Vehicle {
     private String vehicleNumber;
-    private VehicleType vehicleType;
-
-    public Vehicle(String vehicleNumber, VehicleType vehicleType) {
-        this.vehicleNumber = vehicleNumber;
-        this.vehicleType = vehicleType;
-    }
+    private VehicleCategory vehicleType;
 
     public String getVehicleNumber() {
         return vehicleNumber;
@@ -15,11 +10,11 @@ public class Vehicle {
         this.vehicleNumber = vehicleNumber;
     }
 
-    public VehicleType getVehicleType() {
+    public VehicleCategory getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(VehicleType vehicleType) {
+    public void setVehicleType(VehicleCategory vehicleType) {
         this.vehicleType = vehicleType;
     }
 }
