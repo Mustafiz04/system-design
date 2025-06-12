@@ -10,14 +10,14 @@ public class LRUCache<K, V> implements Cache<K, V>{
         map = new HashMap<K, Node<K, V>>();
 
         // Dummy head and tail
-        head = new Node(-1, -1);
-        tail = new Node(-1, -1);
+        head = new Node<>(null, null);
+        tail = new Node<>(null, null);
         head.next = tail;
         tail.prev = head;
     }
 
     @Override
-    public void add(K key, V value) {
+    public synchronized void add(K key, V value) {
         if (map.containsKey(key)) {
             Node<K, V> node = map.get(key);
             node.setValue(value);
@@ -35,7 +35,7 @@ public class LRUCache<K, V> implements Cache<K, V>{
     }
 
     @Override
-    public V get(K key) {
+    public synchronized V get(K key) {
         if (!map.containsKey(key)) {
             System.out.println("Node has not found: ");
             return null;
@@ -52,6 +52,7 @@ public class LRUCache<K, V> implements Cache<K, V>{
             System.out.println("Key " + key + " is not present.");
             return;
         }
+        remove(map.get(key));
         map.remove(key);
     }
 

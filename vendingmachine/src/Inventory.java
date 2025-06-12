@@ -1,45 +1,21 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory {
-    private final Map<Product, Integer> inventory;
+    private final HashMap<Product, Integer> productStocks = new HashMap<>();
 
-    public Inventory () {
-        this.inventory = new HashMap<>();
+    public void addProduct(Product product, int quantity) {
+        this.productStocks.put(product, quantity);
     }
 
-    public Map<Product, Integer> getInventory() {
-        return this.inventory;
+    public void deductProduct(Product product, int quantity) {
+        this.productStocks.put(product, this.productStocks.get(product) - quantity);
     }
 
-    public void addItem(Product product, int quantity) {
-        this.inventory.put(product, this.inventory.getOrDefault(product, 0) + quantity);
+    public boolean isAvailable(Product product) {
+        return this.productStocks.containsKey(product) && this.productStocks.get(product) > 0;
     }
 
-    public void removeProduct(Product product) {
-        this.inventory.remove(product);
-    }
-
-    public void updateQuantity(Product product, int quantity) {
-        this.inventory.put(product, quantity);
-    }
-
-    public Product getProductById(int id) {
-        for(Map.Entry<Product, Integer> e: inventory.entrySet()) {
-            if( e.getKey().getCode() == id ) {
-                return e.getKey();
-            }
-        }
-        return null;
-    }
-
-    public boolean purchaseProduct(Product product, int quantity) {
-        int availableQuantity = inventory.get(product);
-        if( availableQuantity < quantity ) {
-            System.out.println("Only " + availableQuantity + " is available now.");
-            return false;
-        }
-        inventory.put(product, availableQuantity - quantity);
-        return true;
+    public HashMap<Product, Integer> getProductStocks() {
+        return this.productStocks;
     }
 }

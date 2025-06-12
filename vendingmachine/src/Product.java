@@ -1,20 +1,21 @@
 public class Product {
-    private String name;
-    private final int code;
-    private final int price;
+    private final String name;
+    private int price;
 
-    public Product(int code, String name, int price) {
+    Product(String name, int price) {
         this.name = name;
-        this.code = code;
         this.price = price;
     }
 
-    public int getCode() {
-        return code;
+    public String getName() {
+        return name;
     }
 
     public int getPrice() {
         return price;
     }
 
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }

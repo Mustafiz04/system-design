@@ -1,38 +1,28 @@
 public class IdleState implements VendingMachineState {
-
-    public IdleState() {
-        System.out.println("In IDLE STATE");
-    }
-    public IdleState(VendingMachine vendingMachine) {
-        vendingMachine.resetCoinTray();
-    }
     @Override
-    public void clickOnInsertCoinButton(VendingMachine vendingMachine) {
-        vendingMachine.setState(new InsertCoinState());
+    public void insertCoin(VendingMachine vendingMachine, Denomination denomination) {
+        vendingMachine.addBalance(denomination.getValue());
+        System.out.println("Inserted coin: " + denomination.name() + " (" + denomination.getValue() + ")");
+        vendingMachine.setState(new ReadyState());
     }
 
     @Override
-    public void insertCoin(VendingMachine vendingMachine, Coin coin) throws Exception {
-        throw new Exception("Can't insert coin in IDLE state");
+    public void selectProduct(VendingMachine vendingMachine, Product product, int quantity) {
+        System.out.println("Please insert coins before selecting a product.");
     }
 
     @Override
-    public void clickOnSelectProductButton(VendingMachine vendingMachine) throws Exception {
-        throw new Exception("Click on insert coin button first");
+    public void dispenseProduct(VendingMachine vendingMachine) {
+        System.out.println("No product selected. Please insert coins and select a product.");
     }
 
     @Override
-    public void selectProduct(VendingMachine vendingMachine, int code) throws Exception {
-        throw new Exception("Can't select product in IDLE state");
+    public void returnChange(VendingMachine vendingMachine) {
+        System.out.println("No change to return. The machine is idle.");
     }
 
     @Override
-    public int cancelOrder(VendingMachine vendingMachine) throws Exception {
-        throw new Exception("Can't cancel in IDLE state");
-    }
-
-    @Override
-    public Product dispenseProduct(VendingMachine vendingMachine, int code) throws Exception {
-        throw new Exception("Can't dispense product in IDLE state");
+    public void cancelTransaction(VendingMachine vendingMachine) {
+        System.out.println("No transaction to cancel. The machine is idle.");
     }
 }

@@ -1,38 +1,89 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class VendingMachine {
-    private VendingMachineState vendingMachineState;
-    private Inventory inventory;
-    private List<Coin> coins;
+    private final Inventory inventory;
+    private VendingMachineState state;
+    private int balance;
+    private Product selectedProduct;
+    private int quantity;
 
-    public VendingMachine(Inventory inventory) {
-        this.vendingMachineState = new IdleState();
-        this.inventory = inventory;
-        this.coins = new ArrayList<>();
+    VendingMachine() {
+        this.inventory = new Inventory();
+        this.state = new IdleState(); // Initial state
     }
 
-    public void clickCoinButton() throws Exception {
-        vendingMachineState.clickOnInsertCoinButton(this);
-    }
-
-    public void resetCoinTray() {
-        this.coins = new ArrayList<>();
-    }
-
-    public void setState(VendingMachineState vendingMachineState) {
-        this.vendingMachineState = vendingMachineState;
-    }
-
-    public VendingMachineState getVendingMachineState() {
-        return vendingMachineState;
+    public void setState(VendingMachineState state) {
+        this.state = state;
     }
 
     public Inventory getInventory() {
-        return inventory;
+        return this.inventory;
     }
 
-    public List<Coin> getCoins() {
-        return coins;
+    public void addCoin(Denomination denomination) {
+        this.state.insertCoin(this, denomination);
+    }
+
+    public void selectProduct(Product product, int quantity) {
+        this.state.selectProduct(this, product, quantity);
+    }
+
+    public void dispenseProduct() {
+        this.state.dispenseProduct(this);
+    }
+
+    public void returnChange() {
+        this.state.returnChange(this);
+    }
+
+    public void cancelTransaction() {
+        this.state.cancelTransaction(this);
+    }
+
+
+    // internal Method
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    public void addBalance(int amount) {
+        this.balance += amount;
+    }
+
+    public int getBalance() {
+        return this.balance;
+    }
+
+    public void deductBalance(int amount) {
+        if (this.balance >= amount) {
+            this.balance -= amount;
+            System.out.println("Deducted balance: " + amount + ". Remaining balance: " + this.balance);
+        } else {
+            System.out.println("Insufficient balance to deduct: " + amount);
+        }
+    }
+
+    public boolean isProductAvailable(Product product) {
+        return this.inventory.isAvailable(product);
+    }
+
+    public void selectSelectedProduct(Product product) {
+        this.selectedProduct = product;
+    }
+
+    public Product getSelectedProduct() {
+        return this.selectedProduct;
+    }
+
+    public void returnBalance() {
+        int change = getBalance();
+        if (change > 0) {
+            System.out.println("Returning change: " + change);
+            this.balance = 0; // Reset balance after returning change
+        } else {
+            System.out.println("No change to return.");
+        }
     }
 }

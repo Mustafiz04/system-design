@@ -1,14 +1,29 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) throws Exception {
         Inventory inventory = new Inventory();
-        inventory.addItem(new Product(101, "COCA COLA", 10), 10);
-        inventory.addItem(new Product(102, "PEPSI", 15), 10);
+        Product cola = new Product("Cola", 15);
+        Product chips = new Product("Chips", 5);
+        Product candy = new Product("Candy", 1);
 
-        VendingMachine machine = new VendingMachine(inventory);
+        VendingMachine vendingMachine = new VendingMachine();
+        vendingMachine.getInventory().addProduct(cola, 10);
+        vendingMachine.getInventory().addProduct(chips, 10);
+        vendingMachine.getInventory().addProduct(candy, 10);
 
-        machine.clickCoinButton();
+        vendingMachine.addCoin(Denomination.FIVE);
+        vendingMachine.selectProduct(cola, 2);
+        vendingMachine.cancelTransaction();
 
+        System.out.println("-------------------------");
+
+        vendingMachine.addCoin(Denomination.TEN);
+        vendingMachine.addCoin(Denomination.FIVE);
+        vendingMachine.selectProduct(chips, 2);
+        vendingMachine.dispenseProduct();
+        vendingMachine.returnChange();
+
+        System.out.println("-------------------------");
+
+        vendingMachine.cancelTransaction();
     }
 }
