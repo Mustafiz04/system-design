@@ -3,15 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/LowLevelDesign.iml" filepath="$PROJECT_DIR$/.idea/LowLevelDesign.iml" />
-      <module fileurl="file://$PROJECT_DIR$/atm/atm.iml" filepath="$PROJECT_DIR$/atm/atm.iml" />
       <module fileurl="file://$PROJECT_DIR$/cache/cache.iml" filepath="$PROJECT_DIR$/cache/cache.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cricbuzz/cricbuzz.iml" filepath="$PROJECT_DIR$/cricbuzz/cricbuzz.iml" />
       <module fileurl="file://$PROJECT_DIR$/designpattern/designpattern.iml" filepath="$PROJECT_DIR$/designpattern/designpattern.iml" />
-      <module fileurl="file://$PROJECT_DIR$/elevatorsystem/elevatorsystem.iml" filepath="$PROJECT_DIR$/elevatorsystem/elevatorsystem.iml" />
       <module fileurl="file://$PROJECT_DIR$/parkinglot/parkinglot.iml" filepath="$PROJECT_DIR$/parkinglot/parkinglot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ratelimiter/ratelimiter.iml" filepath="$PROJECT_DIR$/ratelimiter/ratelimiter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/snakeladdergame/snakeladdergame.iml" filepath="$PROJECT_DIR$/snakeladdergame/snakeladdergame.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tictactoe/tictactoe.iml" filepath="$PROJECT_DIR$/tictactoe/tictactoe.iml" />
       <module fileurl="file://$PROJECT_DIR$/vendingmachine/vendingmachine.iml" filepath="$PROJECT_DIR$/vendingmachine/vendingmachine.iml" />
     </modules>
   </component>
